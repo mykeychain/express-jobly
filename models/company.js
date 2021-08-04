@@ -142,6 +142,72 @@ class Company {
 
     if (!company) throw new NotFoundError(`No company: ${handle}`);
   }
+
+  /** TODO: LATER */
+
+  static async filter(filterParams) {
+
+    const filter = Company.filter(filterParams);
+
+    console.log("CONSOLE LOGGING HERE: ", filter);
+
+    const results = await db.query(
+      `SELECT handle,
+              name,
+              description,
+              num_employees AS "numEmployees",
+              logo_url AS "logoUrl"
+        FROM companies
+        WHERE ${filter.params}`,
+      filter.values
+    );
+    const companies = results.rows;
+
+    return companies;
+  }
+
+  /** Generates statement for filtering SQL query
+   *    Returns: {
+   *              params: "name ILIKE $1, numEmployees >= $2, numEmployees <= $3",
+   *              values: ["net", 5, 100]
+   *              }
+   */
+
+  static sqlForFilter(filterParams, jsToSql) {
+    // checks if combination of min and max employees is valid
+    if (filterParams.maxEmployees && filterParams.minEmployees) {
+      if (filterParams.maxEmployees < filterParams.minEmployees) {
+        throw new BadRequestError("Minimum Employees must be less than Maximum Employees");
+      };
+    };
+
+    let params = [];
+    let values = [];
+    let idx = 1;
+  
+    if ("nameLike" in filterParams) {
+      params.push(`name ILIKE $${idx}`);
+      idx++;
+      values.push(filterParams.nameLike);
+    }
+  
+    if ("minEmployees" in filterParams) {
+      params.push(`num_employees >= $${idx}`);
+      idx++;
+      values.push(filterParams.minEmployees);
+    }
+  
+    if ("maxEmployees" in filterParams) {
+      params.push(`num_employees <= $${idx}`);
+      idx++;
+      values.push(filter.Params.maxEmployees);
+    }
+  
+    return {
+      params: params.join(", "),
+      values
+    };   
+  }
 }
 
 
