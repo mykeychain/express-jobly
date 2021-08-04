@@ -147,7 +147,7 @@ class Company {
 
   static async filter(filterParams) {
 
-    const filter = Company.filter(filterParams);
+    const filter = Company.sqlForFilter(filterParams);
 
     console.log("CONSOLE LOGGING HERE: ", filter);
 
@@ -162,7 +162,7 @@ class Company {
       filter.values
     );
     const companies = results.rows;
-
+    console.log(companies, "THIS IS COMPANIES FROM FILTER");
     return companies;
   }
 
@@ -188,7 +188,7 @@ class Company {
     if ("nameLike" in filterParams) {
       params.push(`name ILIKE $${idx}`);
       idx++;
-      values.push(filterParams.nameLike);
+      values.push(`%${filterParams.nameLike}%`);
     }
   
     if ("minEmployees" in filterParams) {
@@ -200,11 +200,11 @@ class Company {
     if ("maxEmployees" in filterParams) {
       params.push(`num_employees <= $${idx}`);
       idx++;
-      values.push(filter.Params.maxEmployees);
+      values.push(filterParams.maxEmployees);
     }
   
     return {
-      params: params.join(", "),
+      params: params.join(" AND "),
       values
     };   
   }

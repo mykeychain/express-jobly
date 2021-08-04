@@ -51,15 +51,21 @@ router.get("/", async function (req, res, next) {
   // if parameters are in query string, run filter function
   if (Object.keys(req.query).length !== 0) {
 
+    const searchData = { ...req.query };
+
+    // converts strings to integers if properties exist
+    if (searchData.maxEmployees) searchData.maxEmployees = Number(searchData.maxEmployees);
+    if (searchData.minEmployees) searchData.minEmployees = Number(searchData.minEmployees);
+
     // checks query string for valid parameters
-    const validator = jsonschema.validate(req.query, companyFilterSchema);
+    const validator = jsonschema.validate(searchData, companyFilterSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
       throw new BadRequestError(errs);
     }
 
-    const companies = await Company.filter(req.query);
-    if (!companies[0]) { return res.json({message: "No companies found"}) };
+    const companies = await Company.filter(searchData);
+    if (!companies[0]) { return res.json({ message: "No companies found" }) };
     return res.json({ companies });
   }
 
