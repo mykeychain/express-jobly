@@ -1,6 +1,29 @@
 const { BadRequestError } = require("../expressError");
 
-// I'll get to this later. Need to take a breather first
+/**
+ * sqlForPartialUpdate takes in dataToUpdate (the body from a patch request) 
+ * and jsToSql which comes from the models and converts camel cased names to
+ * snake case to be readable by SQL, or if it's already snake case, it leaves it 
+ * alone. It also sanitizes the data by using parameterized queries and auto 
+ * increments them to get unique numbers for them. 
+ * 
+ * jsToSql: 
+ *      {
+          firstName: "first_name",
+          lastName: "last_name",
+          isAdmin: "is_admin",
+        }
+ * 
+ * 
+ * It returns an object with column names and values like:
+ * 
+ *      {
+ *        setCols: "first_name=$1, age=$2",
+ *        values: ["Aliya", 32]
+ *      }
+ *  
+ * 
+ */
 
 function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   const keys = Object.keys(dataToUpdate);
