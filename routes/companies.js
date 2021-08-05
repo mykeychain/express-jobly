@@ -55,6 +55,7 @@ router.get("/", async function (req, res, next) {
     const searchData = { ...req.query };
 
     // converts strings to integers if properties exist
+    // TODO: if maxEmployee in searchData
     if (searchData.maxEmployees) searchData.maxEmployees = Number(searchData.maxEmployees);
     if (searchData.minEmployees) searchData.minEmployees = Number(searchData.minEmployees);
 
@@ -71,6 +72,7 @@ router.get("/", async function (req, res, next) {
   }
 
   // if no parameters in query string, run findAll function
+  // TODO: bring this to top since it's so short
   const companies = await Company.findAll();
   return res.json({ companies });
 });
