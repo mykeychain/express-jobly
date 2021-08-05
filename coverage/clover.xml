@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1628201183125" clover="3.2.0">
-  <project timestamp="1628201183125" name="All files">
-    <metrics statements="331" coveredstatements="325" conditionals="98" coveredconditionals="92" methods="60" coveredmethods="59" elements="489" coveredelements="476" complexity="0" loc="331" ncloc="331" packages="5" files="15" classes="15"/>
+<coverage generated="1628201797707" clover="3.2.0">
+  <project timestamp="1628201797707" name="All files">
+    <metrics statements="331" coveredstatements="327" conditionals="98" coveredconditionals="93" methods="60" coveredmethods="59" elements="489" coveredelements="479" complexity="0" loc="331" ncloc="331" packages="5" files="15" classes="15"/>
     <package name="express-jobly">
       <metrics statements="50" coveredstatements="49" conditionals="18" coveredconditionals="16" methods="8" coveredmethods="7"/>
       <file name="app.js" path="/Users/mike/Desktop/Rithm/Express/express-jobly/app.js">
@@ -120,7 +120,7 @@
       </file>
     </package>
     <package name="express-jobly.models">
-      <metrics statements="122" coveredstatements="117" conditionals="40" coveredconditionals="36" methods="22" coveredmethods="22"/>
+      <metrics statements="122" coveredstatements="119" conditionals="40" coveredconditionals="37" methods="22" coveredmethods="22"/>
       <file name="_testCommon.js" path="/Users/mike/Desktop/Rithm/Express/express-jobly/models/_testCommon.js">
         <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
         <line num="1" count="3" type="stmt"/>
@@ -186,7 +186,7 @@
         <line num="228" count="5" type="stmt"/>
       </file>
       <file name="job.js" path="/Users/mike/Desktop/Rithm/Express/express-jobly/models/job.js">
-        <metrics statements="24" coveredstatements="19" conditionals="6" coveredconditionals="2" methods="5" coveredmethods="5"/>
+        <metrics statements="24" coveredstatements="21" conditionals="6" coveredconditionals="3" methods="5" coveredmethods="5"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
@@ -196,8 +196,8 @@
         <line num="48" count="1" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
         <line num="69" count="2" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="87" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="87" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="89" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
         <line num="108" count="3" type="stmt"/>

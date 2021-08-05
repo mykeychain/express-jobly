@@ -74,7 +74,7 @@ class Job {
                     handle,
                     name,
                     description,
-                    numEmployees,
+                    num_employees AS numEmployees,
                     logo_url AS "logoUrl"
             FROM jobs
                 JOIN companies
