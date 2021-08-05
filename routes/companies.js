@@ -51,6 +51,7 @@ router.get("/", async function (req, res, next) {
   // if parameters are in query string, run filter function
   if (Object.keys(req.query).length !== 0) {
 
+    // req.query is immutable object so we map it onto a POJO
     const searchData = { ...req.query };
 
     // converts strings to integers if properties exist

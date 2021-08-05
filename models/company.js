@@ -143,13 +143,13 @@ class Company {
     if (!company) throw new NotFoundError(`No company: ${handle}`);
   }
 
-  /** TODO: LATER */
-
+  /** filter: searches database for companies that match filter parameters
+   *    returns array of results:
+   *    [{handle, name, description, numEmployees, logoUrl}, ...]
+   * 
+   */
   static async filter(filterParams) {
-
     const filter = Company.sqlForFilter(filterParams);
-
-    console.log("CONSOLE LOGGING HERE: ", filter);
 
     const results = await db.query(
       `SELECT handle,
@@ -162,18 +162,18 @@ class Company {
       filter.values
     );
     const companies = results.rows;
-    console.log(companies, "THIS IS COMPANIES FROM FILTER");
+
     return companies;
   }
 
   /** Generates statement for filtering SQL query
    *    Returns: {
-   *              params: "name ILIKE $1, numEmployees >= $2, numEmployees <= $3",
+   *              params: "name ILIKE $1 AND numEmployees >= $2 AND numEmployees <= $3",
    *              values: ["net", 5, 100]
    *              }
+   * 
    */
-
-  static sqlForFilter(filterParams, jsToSql) {
+  static sqlForFilter(filterParams) {
     // checks if combination of min and max employees is valid
     if (filterParams.maxEmployees && filterParams.minEmployees) {
       if (filterParams.maxEmployees < filterParams.minEmployees) {
@@ -181,6 +181,7 @@ class Company {
       };
     };
 
+    // push strings and values into arrays so sanitized params are in correct order
     let params = [];
     let values = [];
     let idx = 1;
