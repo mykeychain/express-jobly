@@ -1,15 +1,15 @@
-
 "use strict"
 
 const {BadRequestError} = require("../expressError");
+const { sqlForPartialUpdate } = require("./sql");
 
 describe("convert to SQL", function () {
     test("works: converts successfully", function () {
       const dataToUpdate = {firstName: 'Aliya', age: 32}; // body of the user patch request
       const jsToSql = {firstName: "first_name"};
       const sql = sqlForPartialUpdate(dataToUpdate, jsToSql);
-      // TODO: single quotes on outside
-      expect(sql).toEqual({setCols: "\"first_name\"=$1, \"age\"=$2", values: ["Aliya", 32]});
+    
+      expect(sql).toEqual({setCols: '"first_name"=$1, "age"=$2', values: ["Aliya", 32]});
     });
 
     test("bad request: missing data", function () {

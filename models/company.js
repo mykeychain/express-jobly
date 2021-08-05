@@ -144,13 +144,20 @@ class Company {
   }
 
   /** filter: searches database for companies that match filter parameters
-   * TODO: GIVE EXAMPLE OF PARAMS
+   * 
+   *    takes in:
+   *      {
+   *        "nameLike": "cat",
+   *        "minEmployees": 2,
+   *        "maxEmployees": 20
+   *       }
+   * 
    *    returns array of results:
    *    [{handle, name, description, numEmployees, logoUrl}, ...]
    * 
    */
   static async filter(filterParams) {
-    const filter = Company.sqlForFilter(filterParams);
+    const filter = Company._sqlForFilter(filterParams);
 
     const results = await db.query(
       `SELECT handle,
@@ -159,7 +166,7 @@ class Company {
               num_employees AS "numEmployees",
               logo_url AS "logoUrl"
         FROM companies
-        WHERE ${filter.params}`,
+        WHERE ${filter.whereStatement}`,
       filter.values
     );
     const companies = results.rows;
@@ -168,15 +175,22 @@ class Company {
   }
 
   /** Generates statement for filtering SQL query
-   * TODO: GIVE EXAMPLE OF ARG
+   * 
+   * takes in:
+   *      {
+   *        "nameLike": "cat",
+   *        "minEmployees": 2,
+   *        "maxEmployees": 20
+   *       }
+   * 
    *    Returns: {
    *              params: "name ILIKE $1 AND numEmployees >= $2 AND numEmployees <= $3",
    *              values: ["%net%", 5, 100]
    *              }
    * 
    */
-  // TODO: _sqlForFilter
-  static sqlForFilter(filterParams) {
+  
+  static _sqlForFilter(filterParams) {
     // checks if combination of min and max employees is valid
     if (filterParams.maxEmployees && filterParams.minEmployees) {
       if (filterParams.maxEmployees < filterParams.minEmployees) {
@@ -187,30 +201,24 @@ class Company {
     // push strings and values into arrays so sanitized params are in correct order
     let params = [];
     let values = [];
-    // params.length + 1
-    let idx = 1;
   
     if ("nameLike" in filterParams) {
-      params.push(`name ILIKE $${idx}`);
-      idx++;
+      params.push(`name ILIKE $${params.length + 1}`);
       values.push(`%${filterParams.nameLike}%`);
     }
   
     if ("minEmployees" in filterParams) {
-      params.push(`num_employees >= $${idx}`);
-      idx++;
+      params.push(`num_employees >= $${params.length + 1}`);
       values.push(filterParams.minEmployees);
     }
   
     if ("maxEmployees" in filterParams) {
-      params.push(`num_employees <= $${idx}`);
-      idx++;
+      params.push(`num_employees <= $${params.length + 1}`);
       values.push(filterParams.maxEmployees);
     }
   
     return {
-      // TODO: MORE descriptive name than params
-      params: params.join(" AND "),
+      whereStatement: params.join(" AND "),
       values
     };   
   }
