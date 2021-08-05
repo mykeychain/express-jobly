@@ -8,7 +8,7 @@ describe("convert to SQL", function () {
       const dataToUpdate = {firstName: 'Aliya', age: 32}; // body of the user patch request
       const jsToSql = {firstName: "first_name"};
       const sql = sqlForPartialUpdate(dataToUpdate, jsToSql);
-      // single quotes on outside
+      // TODO: single quotes on outside
       expect(sql).toEqual({setCols: "\"first_name\"=$1, \"age\"=$2", values: ["Aliya", 32]});
     });
 
