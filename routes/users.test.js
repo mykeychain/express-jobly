@@ -257,7 +257,7 @@ describe("GET /users/:username", function () {
 /************************************** PATCH /users/:username */
 
 describe("PATCH /users/:username", () => {
-  test("works for correct users", async function () {
+  test("works for correct non-admin users", async function () {
     const resp = await request(app)
         .patch(`/users/u2`)
         .send({

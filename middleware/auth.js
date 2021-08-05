@@ -66,7 +66,7 @@ function ensureAdminOrCorrectUser(req, res, next) {
     if(!res.locals.user?.isAdmin &&
         res.locals.user?.username !== req.params.username) {
       throw new UnauthorizedError()
-    };
+    }
     return next();
   } catch (err) {
     return next(err);
