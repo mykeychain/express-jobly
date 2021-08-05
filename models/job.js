@@ -47,12 +47,13 @@ class Job {
   static async findAll() {
     const jobsResp = await db.query(
       `SELECT id,
-                    title,
-                    salary,
-                    equity,
-                    company_handle AS "companyHandle"
-            FROM jobs
-            ORDER BY id`);
+            title,
+            salary,
+            equity,
+            company_handle AS "companyHandle"
+        FROM jobs
+        ORDER BY id`);
+        console.log(jobsResp.rows, "FROM INSIDE FINDALL");
     return jobsResp.rows;
   }
 
@@ -74,7 +75,7 @@ class Job {
                     handle,
                     name,
                     description,
-                    num_employees AS numEmployees,
+                    num_employees AS "numEmployees",
                     logo_url AS "logoUrl"
             FROM jobs
                 JOIN companies
@@ -84,7 +85,7 @@ class Job {
 
     const job = jobRes.rows[0];
 
-    if (!job) throw new NotFoundError(`No job: ${id}`);
+    if (!job) throw new NotFoundError(`No job: ${jobId}`);
 
     let { id, title, salary, equity, ...company } = job;
 
@@ -105,7 +106,7 @@ class Job {
    */
 
   static async update(id, data) {
-    const { setCols, values } = sqlForPartialUpdate(data,{});
+    const { setCols, values } = sqlForPartialUpdate(data, {});
 
     const idVarIdx = "$" + (values.length + 1);
 
