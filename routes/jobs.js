@@ -60,7 +60,9 @@ router.get("/", async function (req, res, next) {
   const searchData = { ...req.query };
 
   // converts strings to integer or boolean if properties exist
-  if ("minSalary" in searchData) searchData.minSalary = Number(searchData.minSalary);
+  if ("minSalary" in searchData) { 
+    searchData.minSalary = Number(searchData.minSalary);
+  }
   if ("hasEquity" in searchData) {
     searchData.hasEquity = (searchData.hasEquity.toLowerCase() === "true");
   }
@@ -73,7 +75,7 @@ router.get("/", async function (req, res, next) {
   }
 
   const jobs = await Job.filter(searchData);
-  if (!jobs[0]) { return res.json({ message: "No jobs found" }) };
+  if (!jobs[0]) { return res.json({ message: "No jobs found" }) }; // be careful with this idiom of truthiness/falsiness
   return res.json({ jobs });
 
 });

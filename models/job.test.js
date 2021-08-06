@@ -184,10 +184,10 @@ describe("update", function () {
 
   test("works", async function () {
     const testJob = await db.query(`
-                            SELECT id 
-                            FROM jobs 
-                            WHERE title='j1'`
-                            );
+          SELECT id 
+          FROM jobs 
+          WHERE title='j1'`
+          );
     const id = testJob.rows[0].id;
 
     let job = await Job.update(id, updateData);
@@ -199,8 +199,8 @@ describe("update", function () {
       companyHandle: "c1"
     });
 
-    const result = await db.query(
-          `SELECT id, title, salary, equity, company_handle
+    const result = await db.query(`
+          SELECT id, title, salary, equity, company_handle
           FROM jobs
           WHERE id = $1`, [id]);
     expect(result.rows).toEqual([

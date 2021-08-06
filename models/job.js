@@ -68,14 +68,14 @@ class Job {
   static async get(jobId) {
     const jobRes = await db.query(
       `SELECT id,
-                    title,
-                    salary,
-                    equity,
-                    handle,
-                    name,
-                    description,
-                    num_employees AS "numEmployees",
-                    logo_url AS "logoUrl"
+              title,
+              salary,
+              equity,
+              handle,
+              name,
+              description,
+              num_employees AS "numEmployees",
+              logo_url AS "logoUrl"
             FROM jobs
                 JOIN companies
                 ON company_handle = companies.handle
@@ -86,7 +86,7 @@ class Job {
 
     if (!job) throw new NotFoundError(`No job: ${jobId}`);
 
-    let { id, title, salary, equity, ...company } = job;
+    const { id, title, salary, equity, ...company } = job;
 
     return { id, title, salary, equity, company };
 
@@ -99,7 +99,7 @@ class Job {
    *
    * Data can include: { title, salary, equity }
    *
-   * Returns  { id, title, salary, equity, companyHandle }
+   * Returns  { id, title, salary, equity (as a string), companyHandle }
    *
    * Throws NotFoundError if not found.
    */
