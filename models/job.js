@@ -53,7 +53,6 @@ class Job {
             company_handle AS "companyHandle"
         FROM jobs
         ORDER BY id`);
-        console.log(jobsResp.rows, "FROM INSIDE FINDALL");
     return jobsResp.rows;
   }
 

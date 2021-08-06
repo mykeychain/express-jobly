@@ -160,7 +160,6 @@ describe("filter", function() {
       await Company.filter(filterParams);
       fail();
     } catch (err) {
-      console.log(err);
       expect(err instanceof BadRequestError).toBeTruthy();
     }
   })
