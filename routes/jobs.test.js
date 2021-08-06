@@ -112,26 +112,28 @@ describe("GET /jobs", function () {
   });
 
 
-//   test ("works with filter by query string", async function() {
-//     const resp = await request(app).get(`/companies?nameLike=c1`);
-//     expect(resp.body).toEqual({companies: [{
-//       handle: "c1",
-//       name: "C1",
-//       description: "Desc1",
-//       numEmployees: 1,
-//       logoUrl: "http://c1.img",
-//     }]});
-//   });
+  test ("works with filter by query string", async function() {
+    const resp = await request(app).get(`/jobs?titleLike=j1&hasEquity=true`);
+    expect(resp.body).toEqual({jobs: [
+      {
+        id: expect.any(Number),
+        title: "j1",
+        salary: 1,
+        equity: "0.1",
+        companyHandle: "c1"
+      }
+    ]});
+  });
 
-//   test("bad request if invalid input in query string", async function() {
-//     const resp = await request(app).get(`/companies?minEmployees=invalid&maxEmployees=invalid`);
-//     expect(resp.statusCode).toEqual(400);
-//   })
+  test("bad request if invalid input in query string", async function() {
+    const resp = await request(app).get(`/jobs?minSalary=invalid`);
+    expect(resp.statusCode).toEqual(400);
+  })
 
-//   test("no company matches; returns no companies found", async function() {
-//     const resp = await request(app).get(`/companies?nameLike=no-company-name`);
-//     expect(resp.body).toEqual({message: "No companies found"});
-//   })
+  test("no job matches; returns no jobs found", async function() {
+    const resp = await request(app).get(`/jobs?titleLike=no-job-name`);
+    expect(resp.body).toEqual({message: "No jobs found"});
+  })
 });
 
 /************************************** GET /jobs/:id */

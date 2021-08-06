@@ -11,6 +11,7 @@ const Job = require("../models/job");
 
 const jobNewSchema = require("../schemas/jobNew.json");
 const jobUpdateSchema = require("../schemas/jobUpdate.json");
+const jobFilterSchema = require("../schemas/jobFilter.json");
 
 const router = new express.Router();
 
@@ -39,7 +40,7 @@ router.post("/", ensureAdmin, async function (req, res, next) {
  *   { jobs: [ { id, title, salary, equity, companyHandle }, ...] }
  *
  * Can filter on provided search filters:
- * - title (will find case-insensitive, partial matches)
+ * - titleLike (will find case-insensitive, partial matches)
  * - minSalary
  * - hasEquity
  *
@@ -54,24 +55,26 @@ router.get("/", async function (req, res, next) {
     return res.json({ jobs });
   }
 
-//   // if parameters are in query string, run filter function
-//   // req.query is immutable object so we map it onto a POJO
-//   const searchData = { ...req.query };
+  // if parameters are in query string, run filter function
+  // req.query is immutable object so we map it onto a POJO
+  const searchData = { ...req.query };
 
-//   // converts strings to integers if properties exist
-//   if ("maxEmployees" in searchData) searchData.maxEmployees = Number(searchData.maxEmployees);
-//   if ("minEmployees" in searchData) searchData.minEmployees = Number(searchData.minEmployees);
+  // converts strings to integer or boolean if properties exist
+  if ("minSalary" in searchData) searchData.minSalary = Number(searchData.minSalary);
+  if ("hasEquity" in searchData) {
+    searchData.hasEquity = (searchData.hasEquity.toLowerCase() === "true");
+  }
+  
+  // checks query string for valid parameters
+  const validator = jsonschema.validate(searchData, jobFilterSchema);
+  if (!validator.valid) {
+    const errs = validator.errors.map(e => e.stack);
+    throw new BadRequestError(errs);
+  }
 
-//   // checks query string for valid parameters
-//   const validator = jsonschema.validate(searchData, companyFilterSchema);
-//   if (!validator.valid) {
-//     const errs = validator.errors.map(e => e.stack);
-//     throw new BadRequestError(errs);
-//   }
-
-//   const companies = await Company.filter(searchData);
-//   if (!companies[0]) { return res.json({ message: "No companies found" }) };
-//   return res.json({ companies });
+  const jobs = await Job.filter(searchData);
+  if (!jobs[0]) { return res.json({ message: "No jobs found" }) };
+  return res.json({ jobs });
 
 });
 

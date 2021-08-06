@@ -149,19 +149,21 @@ class Job {
    *       }
    * 
    *    returns array of results:
-   *    [{title, salary, equity, companyHandle}, ...]
+   *    [{id, title, salary, equity, companyHandle}, ...]
    * 
    */
    static async filter(filterParams) {
     const filter = Job._sqlForFilter(filterParams);
 
     const results = await db.query(
-      `SELECT title,
+      `SELECT id,
+              title,
               salary,
               equity,
               company_handle AS "companyHandle"
         FROM jobs
-        WHERE ${filter.whereStatement}`,
+        WHERE ${filter.whereStatement}
+        ORDER BY id`,
       filter.values
     );
     const jobs = results.rows;
@@ -205,7 +207,9 @@ class Job {
     if ("hasEquity" in filterParams && filterParams.hasEquity) {
       params.push(`equity > 0`);
     }
-  
+    
+    if (params.length === 0) throw new BadRequestError("No search valid search parameters")
+
     return {
       whereStatement: params.join(" AND "),
       values

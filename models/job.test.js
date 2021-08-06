@@ -112,61 +112,66 @@ describe("get", function () {
 });
 
 /************************************** filter */
-// describe("filter", function() {
-//   test("works", async function () {
-//     let filterParams = {
-//       nameLike: "c",
-//       minEmployees: 1,
-//       maxEmployees: 1
-//     };
+describe("filter", function() {
+  test("works", async function () {
+    let filterParams = {
+      titleLike: "j",
+      minSalary: 1,
+      hasEquity: true
+    };
 
-//     let companies = await Company.filter(filterParams);
+    let jobs = await Job.filter(filterParams);
 
-//     expect(companies).toEqual([{
-//       handle: "c1",
-//       name: "C1",
-//       description: "Desc1",
-//       numEmployees: 1,
-//       logoUrl: "http://c1.img",
-//     }]);
-//   })
-
-
-//   test("works with only some parameters", async function() {
-//     let filterParams = {
-//       maxEmployees: 1
-//     };
-
-//     let companies = await Company.filter(filterParams);
-
-//     expect(companies).toEqual([{
-//       handle: "c1",
-//       name: "C1",
-//       description: "Desc1",
-//       numEmployees: 1,
-//       logoUrl: "http://c1.img",
-//     }]);
-//   })
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: "j1",
+        salary: 1,
+        equity: "0.1",
+        companyHandle: "c1"
+      },
+      {
+        id: expect.any(Number),
+        title: "j2",
+        salary: 2,
+        equity: "0.2",
+        companyHandle: "c2"
+      }
+    ]);
+  })
 
 
-//   test("bad request error if maxEmployees < minEmployees", async function() {
-//     let filterParams = {
-//       nameLike: "c",
-//       minEmployees: 10,
-//       maxEmployees: 1
-//     };
+  test("works with only some parameters", async function() {
+    let filterParams = {
+      minSalary: 2
+    };
 
-//     try {
-//       await Company.filter(filterParams);
-//       fail();
-//     } catch (err) {
-//       console.log(err);
-//       expect(err instanceof BadRequestError).toBeTruthy();
-//     }
-//   })
+    let jobs = await Job.filter(filterParams);
 
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: "j2",
+        salary: 2,
+        equity: "0.2",
+        companyHandle: "c2"
+      }
+    ]);
+  })
 
-// })
+  test("fails with invalid parameters", async function() {
+    let filterParams = {
+      id: 2
+    };
+
+    try{
+      await Job.filter(filterParams);
+      fail();
+    } catch(err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  })
+})
 
 /************************************** update */
 
