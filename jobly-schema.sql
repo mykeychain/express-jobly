@@ -1,5 +1,5 @@
 CREATE TABLE companies (
-  handle VARCHAR(10) PRIMARY KEY CHECK (handle = lower(handle)),
+  handle VARCHAR(25) PRIMARY KEY CHECK (handle = lower(handle)),
   name TEXT UNIQUE NOT NULL,
   num_employees INTEGER CHECK (num_employees >= 0),
   description TEXT NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE jobs (
   title TEXT NOT NULL,
   salary INTEGER CHECK (salary >= 0),
   equity NUMERIC CHECK (equity <= 1.0),
-  company_handle VARCHAR(10) NOT NULL
+  company_handle VARCHAR(25) NOT NULL
     REFERENCES companies ON DELETE CASCADE
 );
 
